@@ -1,0 +1,100 @@
+2. Basic banking application that manages customer bank accounts 
+
+// Custom Exception for Insufficient Funds
+package main;
+
+public class InsufficientFundsException extends Exception {
+    public InsufficientFundsException(String message) {
+        super(message);
+    }
+}
+
+
+// Custom Exception for Negative Amount
+
+package main;
+
+public class NegativeAmountException extends Exception {
+    public NegativeAmountException(String message) {
+        super(message);
+    }
+}
+
+// BankAccount class to manage customer bank accounts
+package main;
+
+class BankAccount {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException("Initial balance cannot be negative.");
+        }
+        this.balance = initialBalance;
+    }
+
+    // Method to deposit funds
+    public void deposit(double amount) throws NegativeAmountException {
+        if (amount < 0) {
+            throw new NegativeAmountException("Cannot deposit a negative amount.");
+        }
+        balance += amount;
+    }
+
+    // Method to withdraw funds
+    public void withdraw(double amount) throws InsufficientFundsException, NegativeAmountException {
+        if (amount < 0) {
+            throw new NegativeAmountException("Cannot withdraw a negative amount.");
+        }
+        if (amount > balance) {
+            throw new InsufficientFundsException("Insufficient funds for withdrawal.");
+        }
+        balance -= amount;
+    }
+
+    // Method to get the current balance
+    public double getBalance() {
+        return balance;
+    }
+}
+
+// Main class to test the banking application
+package main;
+
+public class BankingApp {
+	public static void main(String[]args) {
+		
+		try {
+			BankAccount account = new BankAccount(1000.00);
+			
+			
+			{
+	            BankAccount account1 = new BankAccount(1000.00);
+
+	            // Deposit funds
+	            account1.deposit(500.00);
+	            System.out.println("Balance after deposit: " + account1.getBalance());
+
+	            // Withdraw funds
+	            account1.withdraw(200.00);
+	            System.out.println("Balance after withdrawal: " + account1.getBalance());
+
+	            // Attempt to withdraw more funds than available
+	            account1.withdraw(1500.00);
+			}
+		}
+	         catch (InsufficientFundsException | NegativeAmountException e) {
+	            System.out.println("Error: " + e.getMessage());
+	        } catch (IllegalArgumentException e) {
+	            System.out.println("Error: " + e.getMessage());
+	        }
+			
+			
+		
+		
+		
+		
+	}
+}
+
+
